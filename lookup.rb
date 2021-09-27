@@ -20,36 +20,33 @@ dns_raw = File.readlines("zone")
 ##
 
  def parse_dns(dns_raw1)
- domain_record = Hash.new
-
- dns_raw1.
-  delete_if { |line| line.empty? }.map { |line| line.strip.split(", ") }.
-  delete_if do |record|
- end.
-
-  each_with_object({}) do |record, records|
-  domain_record[record[1]] = { type: record[0], target: record[2] }
-end
- domain_record
-end
+  domain_record = Hash.new
+   dns_raw1.
+    delete_if { |line| line.empty? }.map { |line| line.strip.split(", ") }.
+    delete_if do |record|
+   end.
+    each_with_object({}) do |record, records|
+    domain_record[record[1]] = { type: record[0], target: record[2] }
+    end
+   domain_record
+ end
 
 
-    def resolve(dns_records, lookup_chain, domain_record)
-      row = dns_records[domain_record]
-      if (!row)
+def resolve(dns_records, lookup_chain, domain_record)
+ row = dns_records[domain_record]
+    if (!row)
         lookup_chain = []
         lookup_chain << "Error: record not found for  " + domain_record
-        return lookup_chain
-      elsif row[:type] == "A"
+    elsif row[:type] == "A"
         lookup_chain << row[:target]
-        return lookup_chain
-      elsif row[:type] == "CNAME"
+    elsif row[:type] == "CNAME"
         lookup_chain << row[:target]
         resolve(dns_records, lookup_chain, row[:target])
-      else
+    else
         puts "Error"
-      end
     end
+      return lookup_chain
+end
 
 
 # To complete the assignment, implement `parse_dns` and `resolve`.

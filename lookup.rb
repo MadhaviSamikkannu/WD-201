@@ -35,11 +35,11 @@ def resolve(dns_records, lookup_chain, domain_record)
     if (!row)
         lookup_chain = []
         lookup_chain << "Error: record not found for  " + domain_record
+      elsif row[:type] == "A"
+        lookup_chain << row[:target]
     elsif row[:type] == "CNAME"
         lookup_chain << row[:target]
         resolve(dns_records, lookup_chain, row[:target])
-    elsif row[:type] == "A"
-        lookup_chain << row[:target]
     else
         puts "Error"
         return lookup_chain
